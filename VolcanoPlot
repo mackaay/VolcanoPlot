@@ -8,3 +8,22 @@ with(subset(GSE32466logFC, abs(logFC)>2), points(logFC, -log10(adj.P.Val), pch=2
 # Label points with the textxy function from the calibrate plot
 library(calibrate)
 with(subset(GSE32466logFC, abs(logFC)>2), textxy(logFC, -log10(adj.P.Val), labs=miRNA_ID, cex=.6))
+
+
+
+
+
+require(ggplot2)
+##Highlight genes that have an absolute fold change > 2 and a p-value < Bonferroni cut-off
+gene_list$threshold = as.factor(abs(gene_list$logFC) > 2 & gene_list$P.Value < 0.05/no_of_genes)
+ 
+##Construct the plot object
+g = ggplot(data=gene_list, aes(x=logFC, y=-log10(P.Value), colour=threshold)) +
+  geom_point(alpha=0.4, size=1.75) +
+  opts(legend.position = "none") +
+  xlim(c(-10, 10)) + ylim(c(0, 15)) +
+  xlab("log2 fold change") + ylab("-log10 p-value")
+g
+##Graph not shown
+g + geom_text(aes(x=gene1$logFC, y=-log10(gene1$P.Value),
+                     label=gene1$ID, size=1.2), colour="black")
