@@ -1,0 +1,10 @@
+head(GSE32466logFC)
+
+# Make a basic volcano plot
+with(GSE32466logFC, plot(logFC, -log10(adj.P.Val), pch=20, main="Volcano plot", xlim=c(-12,12)))
+
+with(subset(GSE32466logFC, abs(logFC)>2), points(logFC, -log10(adj.P.Val), pch=20, col="red"))
+
+# Label points with the textxy function from the calibrate plot
+library(calibrate)
+with(subset(GSE32466logFC, abs(logFC)>2), textxy(logFC, -log10(adj.P.Val), labs=miRNA_ID, cex=.6))
